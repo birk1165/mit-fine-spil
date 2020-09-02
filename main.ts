@@ -47,12 +47,12 @@ controller.moveSprite(min_sprite, 100, 100)
 min_sprite.setFlag(SpriteFlag.StayInScreen, true)
 game.onUpdateInterval(1000, function () {
     astroide = sprites.create(img`
-        . . . . . . . c c c a c . . . . 
-        . . c c b b b a c a a a c . . . 
-        . c c a b a c b a a a b c c . . 
-        . c a b c f f f b a b b b a . . 
-        . c a c f f f 8 a b b b b b a . 
-        . c a 8 f f 8 c a b b b b b a . 
+        4 . 2 . 2 4 . c c c a c 5 2 2 . 
+        2 2 c c b b b a c a a a c 2 5 . 
+        2 c c a b a c b a a a b c c 2 . 
+        4 c a b c f f f b a b b b a 2 2 
+        4 c a c f f f 8 a b b b b b a 2 
+        4 c a 8 f f 8 c a b b b b b a 2 
         c c c a c c c c a b c f a b c c 
         c c a a a c c c a c f f c b b a 
         c c a b 6 a c c a f f c c b b a 
