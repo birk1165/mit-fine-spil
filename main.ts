@@ -20,7 +20,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 100)
-    sprite.destroy(effects.trail, 100)
+    sprite.destroy(effects.fire, 100)
 })
 let astroide: Sprite = null
 let projectile: Sprite = null
