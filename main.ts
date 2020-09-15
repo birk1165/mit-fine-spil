@@ -18,6 +18,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . . . . . . . . 
         `, min_sprite, 0, -70)
 })
+sprites.onDestroyed(SpriteKind.Player, function (sprite) {
+    min_sprite.destroy(effects.spray, 500)
+    info.changeLifeBy(-1)
+})
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.fire, 100)
     sprite.destroy(effects.trail, 100)
@@ -45,6 +49,7 @@ min_sprite = sprites.create(img`
     `, SpriteKind.Player)
 controller.moveSprite(min_sprite, 100, 100)
 min_sprite.setFlag(SpriteFlag.StayInScreen, true)
+info.setLife(3)
 game.onUpdateInterval(1000, function () {
     astroide = sprites.create(img`
         4 . 2 . 2 4 . c c c a c 5 2 2 . 
