@@ -302,7 +302,7 @@ game.onUpdateInterval(20000, function () {
         ................................................................
         ................................................................
         `, SpriteKind.boss)
-    boss_life = 5
+    boss_life = 10
     bowser.y = -16
     bowser.vy = 20
     info.startCountdown(15)
