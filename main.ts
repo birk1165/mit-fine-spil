@@ -250,6 +250,8 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     info.changeScoreBy(1)
 })
 let koomba: Sprite = null
+let astro_speed = 0
+let astro_pos = 0
 let boss_life = 0
 let projectile: Sprite = null
 let bowser: Sprite = null
@@ -309,8 +311,6 @@ let text_list = [img`
     . . . c c c c b b b b b c c . . 
     . . . . . . . . c b b c . . . . 
     `]
-let astro_speed = 0
-let astro_pos = 0
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
