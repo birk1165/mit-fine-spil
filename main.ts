@@ -229,7 +229,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         `, min_sprite, 0, -70)
 })
 sprites.onOverlap(SpriteKind.beam, SpriteKind.Player, function (sprite, otherSprite) {
-    game.over(false, effects.melt)
+    game.over(false, effects.clouds)
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
     sprite.destroy(effects.trail, 100)
@@ -250,8 +250,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     info.changeScoreBy(1)
 })
 let koomba: Sprite = null
-let astro_speed = 0
-let astro_pos = 0
+let astro_type = 0
 let boss_life = 0
 let projectile: Sprite = null
 let bowser: Sprite = null
@@ -259,58 +258,60 @@ let et: Sprite = null
 let min_sprite: Sprite = null
 info.setScore(0)
 info.setLife(3)
-let text_list = [img`
+let astro_list = [img`
+    . . . . 2 5 2 5 2 5 2 2 5 2 . . 
+    . . . 2 4 4 4 4 4 4 4 4 4 4 2 . 
+    . . . 5 f f 4 4 4 4 4 4 f f 5 . 
+    . . . 5 4 4 f 4 4 4 4 f 4 4 5 . 
+    . . . 2 4 1 1 1 4 4 1 1 1 4 2 . 
+    . . . 5 4 1 f 1 4 4 1 f 1 4 2 . 
+    . . . 2 4 1 1 1 4 4 1 1 1 4 5 . 
+    . . . 2 4 4 4 4 4 4 4 4 4 4 2 . 
+    . . . . . . . e . . e . . . . . 
+    . . . . . e e e . . e e e . . . 
+    . . . . . e e e . . e e e . . . 
+    . . . . . e e e . . e e e . . . 
     . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . c c c c . . 
-    . c c c c c . c c c c c f c c . 
-    c c a c c c c c 8 f f c f f c c 
-    c a f a a c c a f f c a a f f c 
-    c a 8 f a a c a c c c a a a a c 
-    c b c f a a a a a c c c c c c c 
-    c b b a a c f 8 a c c c 8 c c c 
-    . c b b a b c f a a a 8 8 c c . 
-    . . . . a a b b b a a 8 a c . . 
-    . . . . c b c a a c c b . . . . 
-    . . . . b b c c a b b a . . . . 
-    . . . . b b a b a 6 a . . . . . 
-    . . . . c b b b 6 6 c . . . . . 
-    . . . . . c a 6 6 b c . . . . . 
-    . . . . . . . c c c . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
     `, img`
-    . . . . . . c c c . . . . . . . 
-    . . . . . a a a c c c . . . . . 
-    . . . c a c f a a a a c . . . . 
-    . . c a c f f f a f f a c . . . 
-    . c c a c c f a a c f f a c . . 
-    . a b a a c 6 a a c c f a c c c 
-    . a b b b 6 a b b a a c a f f c 
-    . . a b b a f f b b a a c f f c 
-    c . a a a c c f c b a a c f a c 
-    c c a a a c c a a a b b a c a c 
-    a c a b b a a 6 a b b 6 b b c . 
-    b a c b b b 6 b c . c c a c . . 
-    b a c c a b b a c . . . . . . . 
-    b b a c a b a a . . . . . . . . 
-    a b 6 b b a c . . . . . . . . . 
-    . a a b c . . . . . . . . . . . 
+    . . . . . . a a c c a a . . . . 
+    . . . . . a 3 3 3 3 3 3 a . . . 
+    . . . . 3 c 3 3 3 3 3 3 c 3 . . 
+    . . . a 3 c d 3 3 3 3 3 c 3 a . 
+    . . . f 3 3 d 3 3 3 3 3 c 3 f . 
+    . . . f 3 3 d 3 3 3 3 3 3 3 f . 
+    . . . f 3 3 d 3 3 3 3 3 3 3 f . 
+    . . . f 3 c 3 d d 3 3 3 c 3 f . 
+    . . . a 3 c a c c c c a c 3 a . 
+    . . . a 3 a c b b b b c a 3 a . 
+    . . . a 3 a b b b b b b a 3 a . 
+    . . . a a a a a a a a a a a a . 
+    . . . f a d a a a a a a d a f . 
+    . . . f a 3 d a a a a d 3 a f . 
+    . . . f f a a a a a a a a f f . 
+    . . . . f f . . . . . . f f . . 
     `, img`
-    . . . . . . . c c c a c . . . . 
-    . . c c b b b a c a a a c . . . 
-    . c c a b a c b a a a b c c . . 
-    . c a b c f f f b a b b b a . . 
-    . c a c f f f 8 a b b b b b a . 
-    . c a 8 f f 8 c a b b b b b a . 
-    c c c a c c c c a b c f a b c c 
-    c c a a a c c c a c f f c b b a 
-    c c a b 6 a c c a f f c c b b a 
-    c a b c 8 6 c c a a a b b c b c 
-    c a c f f a c c a f a c c c b . 
-    c a 8 f c c b a f f c b c c c . 
-    . c b c c c c b f c a b b a c . 
-    . . a b b b b b b b b b b b c . 
-    . . . c c c c b b b b b c c . . 
-    . . . . . . . . c b b c . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . 6 6 6 6 6 6 6 6 . . 
+    . . . . . 6 c 6 6 6 6 6 6 9 6 . 
+    . . . . 6 c c 6 6 6 6 6 6 9 c 6 
+    . . d 6 9 c c 6 9 9 9 9 9 9 c c 
+    . d 6 6 9 c b 8 8 8 8 8 8 8 6 c 
+    . 6 6 6 9 b 8 8 b b b 8 b b 8 6 
+    . 6 6 6 6 6 8 b b b b 8 b b b 8 
+    . 6 6 6 6 8 6 6 6 6 6 8 6 6 6 8 
+    . 6 d d 6 8 f 8 8 8 f 8 8 8 8 8 
+    . d d 6 8 8 8 f 8 8 f 8 8 8 8 8 
+    . 8 8 8 8 8 8 8 f f f 8 8 8 8 8 
+    . 8 8 8 8 f f f 8 8 8 8 f f f f 
+    . . . 8 f f f f f 8 8 f f f f f 
+    . . . . f f f f . . . . f f f . 
+    . . . . . . . . . . . . . . . . 
     `]
+let astro_speed = 0
+let astro_pos = 0
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
@@ -455,6 +456,11 @@ controller.moveSprite(min_sprite, 100, 100)
 min_sprite.setFlag(SpriteFlag.StayInScreen, true)
 min_sprite.y = scene.screenHeight()
 game.onUpdate(function () {
+    if (info.score() >= 30) {
+        game.over(true, effects.confetti)
+    }
+})
+game.onUpdate(function () {
     if (bowser.top > 0) {
         bowser.top = 0
         bowser.vy = 0
@@ -470,24 +476,18 @@ game.onUpdate(function () {
         bowser.destroy(effects.confetti, 500)
     }
 })
-game.onUpdate(function () {
-    if (info.score() >= 30) {
-        game.over(true, effects.confetti)
-    }
-})
 game.onUpdateInterval(1000, function () {
-    let astro_list: number[] = []
+    astro_type = randint(0, 2)
     astro_pos = randint(0, scene.screenWidth())
-    astro_speed = randint(10, 50)
     koomba = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . 4 4 4 4 4 4 4 4 4 4 . . 
-        . . . . f f 4 4 4 4 4 4 f f . . 
-        . . . . 4 4 f 4 4 4 4 f 4 4 . . 
-        . . . . 4 1 1 1 4 4 1 1 1 4 . . 
-        . . . . 4 1 f 1 4 4 1 f 1 4 . . 
-        . . . . 4 1 1 1 4 4 1 1 1 4 . . 
-        . . . . 4 4 4 4 4 4 4 4 4 4 . . 
+        . . . . 2 5 2 5 2 5 2 2 5 2 . . 
+        . . . 2 4 4 4 4 4 4 4 4 4 4 2 . 
+        . . . 5 f f 4 4 4 4 4 4 f f 5 . 
+        . . . 5 4 4 f 4 4 4 4 f 4 4 5 . 
+        . . . 2 4 1 1 1 4 4 1 1 1 4 2 . 
+        . . . 5 4 1 f 1 4 4 1 f 1 4 2 . 
+        . . . 2 4 1 1 1 4 4 1 1 1 4 5 . 
+        . . . 2 4 4 4 4 4 4 4 4 4 4 2 . 
         . . . . . . . e . . e . . . . . 
         . . . . . e e e . . e e e . . . 
         . . . . . e e e . . e e e . . . 
@@ -497,9 +497,21 @@ game.onUpdateInterval(1000, function () {
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, SpriteKind.Enemy)
-    koomba.x = randint(0, 200)
-    koomba.y = astro_list[randint(0, 2)]
-    koomba.ay = 100
+    koomba.y = -10
+    koomba.x = astro_pos
+    if (astro_type == 0) {
+        astro_speed = 100
+        koomba.setImage(astro_list[astro_type])
+        koomba.ay = 100
+    } else if (astro_type == 1) {
+        astro_speed = 20
+        koomba.setImage(astro_list[astro_type])
+        koomba.ay = 100
+    } else if (astro_type == 2) {
+        astro_speed = 300
+        koomba.setImage(astro_list[astro_type])
+        koomba.ay = 100
+    }
 })
 game.onUpdateInterval(20000, function () {
     bowser = sprites.create(img`
