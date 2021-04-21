@@ -249,7 +249,9 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     sprite.destroy(effects.fire, 100)
     info.changeScoreBy(1)
 })
+let astro_speed = 0
 let koomba: Sprite = null
+let astro_pos = 0
 let astro_type = 0
 let boss_life = 0
 let projectile: Sprite = null
@@ -259,14 +261,14 @@ let min_sprite: Sprite = null
 info.setScore(0)
 info.setLife(3)
 let astro_list = [img`
-    . . . . 2 5 2 5 2 5 2 2 5 2 . . 
-    . . . 2 4 4 4 4 4 4 4 4 4 4 2 . 
-    . . . 5 f f 4 4 4 4 4 4 f f 5 . 
-    . . . 5 4 4 f 4 4 4 4 f 4 4 5 . 
-    . . . 2 4 1 1 1 4 4 1 1 1 4 2 . 
-    . . . 5 4 1 f 1 4 4 1 f 1 4 2 . 
-    . . . 2 4 1 1 1 4 4 1 1 1 4 5 . 
-    . . . 2 4 4 4 4 4 4 4 4 4 4 2 . 
+    . . . . . . . . . . . . . . . . 
+    . . . . 4 4 4 4 4 4 4 4 4 4 . . 
+    . . . . f f 4 4 4 4 4 4 f f . . 
+    . . . . 4 4 f 4 4 4 4 f 4 4 . . 
+    . . . . 4 1 1 1 4 4 1 1 1 4 . . 
+    . . . . 4 1 f 1 4 4 1 f 1 4 . . 
+    . . . . 4 1 1 1 4 4 1 1 1 4 . . 
+    . . . . 4 4 4 4 4 4 4 4 4 4 . . 
     . . . . . . . e . . e . . . . . 
     . . . . . e e e . . e e e . . . 
     . . . . . e e e . . e e e . . . 
@@ -310,8 +312,6 @@ let astro_list = [img`
     . . . . f f f f . . . . f f f . 
     . . . . . . . . . . . . . . . . 
     `]
-let astro_speed = 0
-let astro_pos = 0
 scene.setBackgroundImage(img`
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
